@@ -93,13 +93,13 @@ describe "CWLS LAS reader" do
       it { expect(las.curve('DEPT').log_data).to eq(c) }
     end
     context "get DT curve from wrap_mode with nil values from LAS v1.2 file 'example3.las'" do
-      c = [nil, nil, nil, nil, nil]
+      c = ["", "", "", "", ""]
       las = CWLSLas.new
       las.load_file(file_path+'/example3.las')
       it { expect(las.curve('DT').log_data).to eq(c) }
     end
     context "get DT curve from wrap_mode with nil values from LAS v2.0 file 'example23.las'" do
-      c = [nil, nil, nil, nil, nil]
+      c = ["", "", "", "", ""]
       las = CWLSLas.new
       las.load_file(file_path+'/example23.las')
       it { expect(las.curve('DT').log_data).to eq(c) }
@@ -280,5 +280,40 @@ describe "CWLS LAS reader" do
     end
   end
 
+  describe CWLSLas, "#step" do
+    context "get depth step size from las v2.0 file 'example24_check.las'" do
+      step_size = 0.5
+      las = CWLSLas.new
+      las.load_file(file_path+'/example24_check.las')
+      it { expect(las.step).to eq(step_size) }
+    end
+  end
+
+  describe CWLSLas, "#start_depth" do
+    context "get start_depth from las v2.0 file 'example24_check.las'" do
+      start_depth = 316.00
+      las = CWLSLas.new
+      las.load_file(file_path+'/example24_check.las')
+      it { expect(las.start_depth).to eq(start_depth) }
+    end
+  end
+
+  describe CWLSLas, "#stop_depth" do
+    context "get stop_depth from las v2.0 file 'example24_check.las'" do
+      stop_depth = 17750.00
+      las = CWLSLas.new
+      las.load_file(file_path+'/example24_check.las')
+      it { expect(las.stop_depth).to eq(stop_depth) }
+    end
+  end
+
+  describe CWLSLas, "#depth_unit" do
+    context "get depth step size from las v2.0 file 'example24_check.las'" do
+      depth_unit = "F"
+      las = CWLSLas.new
+      las.load_file(file_path+'/example24_check.las')
+      it { expect(las.depth_unit).to eq(depth_unit) }
+    end
+  end
 
 end
