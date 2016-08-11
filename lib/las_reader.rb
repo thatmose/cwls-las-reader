@@ -37,7 +37,7 @@ module LasReader
   def set_tops_info(info)
     current_top = info.match(/\s*(\w+)\s*(\d+.?\d*)\s*$/)
     unless current_top.nil?
-      @tops["#{current_top[0]}"] = current_top[1]
+      @tops["#{current_top[1]}"] = current_top[2]
     end
   end
 
@@ -310,8 +310,8 @@ module LasReader
     # Arguments:
     #   top_name : (String)
 
-    def top(top_name)
-      self.tops[top_name]
+    def top_depth(top_name)
+      self.tops[top_name].to_f
     end
 
     # Return a list of mnemonics representing the curve names
