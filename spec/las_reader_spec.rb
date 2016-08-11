@@ -318,6 +318,10 @@ describe "CWLS LAS reader" do
 
   describe CWLSLas, "tops section" do
     context "Get number of tops in AB v2.0 las file 'example25_tops.las" do
+      num_tops = 30
+      las = CWLSLas.new
+      las.load_file(file_path+'/example25_tops.las')
+      it { expect(las.top_names.size).to eq(num_tops) }
     end
   end
 
