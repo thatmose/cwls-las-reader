@@ -11,6 +11,7 @@ module LasReader
   attr_reader :curves
   attr_reader :parameters
   attr_reader :well_info
+  attr_reader :tops
 
   def set_version(info)
     version = info.match(/(VERS\s*\.).+([1-3]\.[0-9]).*:\s*(.*)/)
@@ -30,6 +31,13 @@ module LasReader
     unless mnemonic.nil?
       @curves["#{mnemonic[1]}"] = Curve.new(mnemonic[1],mnemonic[2],mnemonic[3],mnemonic[4])
       @acurves << mnemonic[1]
+    end
+  end
+
+  def set_tops_info(info)
+    current_top = info.match(/\s*(\w+)\s*(\d+.?\d*)\s*$/)
+    unless current_top.nil?
+      @tops["#{current_top[1]}"] = current_top[2]
     end
   end
 
@@ -170,6 +178,7 @@ module LasReader
 
     temp_array = []
     @curves = {}
+    @tops = {}
     @parameters = {}
     @acurves = []
 
@@ -199,6 +208,8 @@ module LasReader
               read_state = 5 
             when 'A' # ASCII Log data section
               read_state = 6 
+            when 't' # Tops information section
+              read_state = 7
             else
               raise "unsupported file format for #{line}"
             read_state = 0 # Unknow file format
@@ -220,7 +231,9 @@ module LasReader
               temp_array = log_wrap_data(line,temp_array)
             else
               log_nowrap_data(line)
-            end 
+            end
+          when 7
+            set_tops_info(line.lstrip)
           end
         end
       end
@@ -258,6 +271,19 @@ module LasReader
       self.curves.keys
     end
 
+    # Return a list of formation names representing the tops
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.tops
+    #   => ["Franky", "Mikey", "Oily", "Canolly"]
+    #
+
+    def top_names
+      self.tops.keys
+    end
+
     # Returns an object representing the curve selected
     # 
     # Example:
@@ -271,6 +297,21 @@ module LasReader
 
     def curve(curve_name)
       self.curves[curve_name]
+    end
+
+    # Returns the start depth of the formation
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.top('Oily')
+    #   => 509.500
+    #
+    # Arguments:
+    #   top_name : (String)
+
+    def top_depth(top_name)
+      self.tops[top_name].to_f
     end
 
     # Return a list of mnemonics representing the curve names

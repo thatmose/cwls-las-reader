@@ -316,4 +316,29 @@ describe "CWLS LAS reader" do
     end
   end
 
+  describe CWLSLas, "tops section" do
+    context "get number of tops in AB v2.0 las file 'example25_tops.las" do
+      num_tops = 30
+      las = CWLSLas.new
+      las.load_file(file_path+'/example25_tops.las')
+      it { expect(las.top_names.size).to eq(num_tops) }
+    end
+
+    context "get number of tops in US v2.0 file with no tops 'example24_check" do
+      num_tops = 0
+      las = CWLSLas.new
+      las.load_file(file_path+'/example24_check.las')
+      it { expect(las.top_names.size).to eq(num_tops) }
+    end
+
+    context "access tops object" do
+      top_name = 'PUSKWSK'
+      top_start_depth = 509.5
+      las = CWLSLas.new
+      las.load_file(file_path+'/example25_tops.las')
+      it { expect(las.top_depth(top_name)).to eq(top_start_depth) }
+      
+    end
+  end
+
 end
