@@ -323,6 +323,13 @@ describe "CWLS LAS reader" do
       las.load_file(file_path+'/example25_tops.las')
       it { expect(las.top_names.size).to eq(num_tops) }
     end
+
+    context "Should not have tops section" do
+      num_tops = 30
+      las = CWLSLas.new
+      las.load_file(file_path+'/example24_check.las')
+      it { expect(las.top_names.size).to eq(num_tops) }
+    end
   end
 
 end
