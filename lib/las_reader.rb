@@ -258,6 +258,19 @@ module LasReader
       self.curves.keys
     end
 
+    # Return a list of formation names representing the tops
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.tops
+    #   => ["Franky", "Mikey", "Oily", "Canolly"]
+    #
+
+    def top_names
+      self.tops.keys
+    end
+
     # Returns an object representing the curve selected
     # 
     # Example:
@@ -271,6 +284,21 @@ module LasReader
 
     def curve(curve_name)
       self.curves[curve_name]
+    end
+
+    # Returns the start depth of the formation
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.top('Oily')
+    #   => 509.500
+    #
+    # Arguments:
+    #   top_name : (String)
+
+    def top(top_name)
+      self.tops[top_name]
     end
 
     # Return a list of mnemonics representing the curve names
