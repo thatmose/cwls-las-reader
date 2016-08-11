@@ -232,238 +232,238 @@ module LasReader
 
     include LasReader
 
-  # Initialize CWLSLas object passing las file as argument
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #
-  # Arguments:
-  #   las_file_name: (String)
+    # Initialize CWLSLas object passing las file as argument
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #
+    # Arguments:
+    #   las_file_name: (String)
 
-  def initialize(filename=nil)
-    load_file(filename) if not filename.nil?
+    def initialize(filename=nil)
+      load_file(filename) if not filename.nil?
+    end
+
+    # Return a list of mnemonics representing the curve names
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.curve_names
+    #   => ["ILD", "ILM", "DT", "NPHI", "RHOB", "SFLA", "SFLU", "DEPT"]
+    #
+
+    def curve_names
+      self.curves.keys
+    end
+
+    # Returns an object representing the curve selected
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.curve('ILD')
+    #   => #<LasReader::Curve:0x7f @description="DEEP RESISTIVITY", @unit="OHMM", @name="ILD", @log_data=[105.6, 105.6, 105.6]>
+    #
+    # Arguments:
+    #   curve mnemonic: (String)
+
+    def curve(curve_name)
+      self.curves[curve_name]
+    end
+
+    # Return a list of mnemonics representing the curve names
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.well_name
+    #   => "ANY ET AL OIL WELL #12"
+    #
+
+    def well_name
+      self.well_info.well_name
+    end
+
+    # Returns the company name tha owns the well
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.company_name
+    #   => "ANY OIL COMPANY LTD."
+    #
+
+    def company_name
+      self.well_info.company_name
+    end
+
+    # Returns the field name described in the file
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.field_name
+    #   => "CAMPOS"
+    #
+
+    def field_name
+      self.well_info.field_name
+    end
+
+    # Returns the location described in the file 
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.location
+    #   => "-43.173871636390686 -22.964858960678484"
+    #
+
+    def location
+      self.well_info.location
+    end
+
+    # Returns the province described in the file 
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.province
+    #   => "RIO DE JANEIRO"
+    #
+
+    def province
+      self.well_info.province
+    end
+
+    # Returns the service company that performed the log acquisition 
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.service_company
+    #   => "ANY LOGGING COMPANY LTD."
+    #
+
+    def service_company
+      self.well_info.service_company
+    end
+
+    # Returns a String with the date described in the file.
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.log_date
+    #   => "25-DEC-1988"
+    #
+
+    def log_date
+      self.well_info.date_logged
+    end
+
+    # Returns the UWI (UNIQUE WELL ID) described in the file  
+    # 
+    # Returns API if UWI not found (for locations outside Canada)
+    #
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.uwi
+    #   => "100091604920W300"
+    #
+
+    def uwi
+      self.well_info.uwi || self.well_info.api
+    end
+
+    # Returns the state described in the file 
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.state
+    #   => "KANSAS"
+    #
+
+    def state
+      self.well_info.state
+    end
+
+    # Returns the county described in the file 
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.county
+    #   => "KENAI"
+    #
+
+    def county
+      self.well_info.county
+    end
+
+    # Returns the country described in the file 
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.country
+    #   => "US"
+    #
+    
+    def country
+      self.well_info.country
+    end
+
+    # Returns the depth step size in the file 
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.step
+    #   => 0.5
+    #
+    def step
+      self.well_info.step
+    end
+
+    # Returns the start_depth in the file 
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.start_depth
+    #   => 316.00
+    #
+    def start_depth
+      self.well_info.start_depth
+    end
+
+    # Returns the stop_depth in the file 
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.stop_depth
+    #   => 17771.00
+    #
+    def stop_depth
+      self.well_info.stop_depth
+    end
+
+    # Returns the depth units in the file 
+    # 
+    # Example:
+    #   >> my_well = CWLSLas.new('my_well.las')
+    #   => #<CWLSLas>
+    #   >> my_well.depth_unit
+    #   => "F"
+    #
+    def depth_unit
+      self.well_info.depth_unit
+    end
+
   end
-
-  # Return a list of mnemonics representing the curve names
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.curve_names
-  #   => ["ILD", "ILM", "DT", "NPHI", "RHOB", "SFLA", "SFLU", "DEPT"]
-  #
-
-  def curve_names
-    self.curves.keys
-  end
-
-  # Returns an object representing the curve selected
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.curve('ILD')
-  #   => #<LasReader::Curve:0x7f @description="DEEP RESISTIVITY", @unit="OHMM", @name="ILD", @log_data=[105.6, 105.6, 105.6]>
-  #
-  # Arguments:
-  #   curve mnemonic: (String)
-
-  def curve(curve_name)
-    self.curves[curve_name]
-  end
-
-  # Return a list of mnemonics representing the curve names
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.well_name
-  #   => "ANY ET AL OIL WELL #12"
-  #
-
-  def well_name
-    self.well_info.well_name
-  end
-
-  # Returns the company name tha owns the well
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.company_name
-  #   => "ANY OIL COMPANY LTD."
-  #
-
-  def company_name
-    self.well_info.company_name
-  end
-
-  # Returns the field name described in the file
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.field_name
-  #   => "CAMPOS"
-  #
-
-  def field_name
-    self.well_info.field_name
-  end
-
-  # Returns the location described in the file 
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.location
-  #   => "-43.173871636390686 -22.964858960678484"
-  #
-
-  def location
-    self.well_info.location
-  end
-
-  # Returns the province described in the file 
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.province
-  #   => "RIO DE JANEIRO"
-  #
-
-  def province
-    self.well_info.province
-  end
-
-  # Returns the service company that performed the log acquisition 
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.service_company
-  #   => "ANY LOGGING COMPANY LTD."
-  #
-
-  def service_company
-    self.well_info.service_company
-  end
-
-  # Returns a String with the date described in the file.
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.log_date
-  #   => "25-DEC-1988"
-  #
-
-  def log_date
-    self.well_info.date_logged
-  end
-
-  # Returns the UWI (UNIQUE WELL ID) described in the file  
-  # 
-  # Returns API if UWI not found (for locations outside Canada)
-  #
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.uwi
-  #   => "100091604920W300"
-  #
-
-  def uwi
-    self.well_info.uwi || self.well_info.api
-  end
-
-  # Returns the state described in the file 
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.state
-  #   => "KANSAS"
-  #
-
-  def state
-    self.well_info.state
-  end
-
-  # Returns the county described in the file 
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.county
-  #   => "KENAI"
-  #
-
-  def county
-    self.well_info.county
-  end
-
-  # Returns the country described in the file 
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.country
-  #   => "US"
-  #
-  
-  def country
-    self.well_info.country
-  end
-
-  # Returns the depth step size in the file 
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.step
-  #   => 0.5
-  #
-  def step
-    self.well_info.step
-  end
-
-  # Returns the start_depth in the file 
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.start_depth
-  #   => 316.00
-  #
-  def start_depth
-    self.well_info.start_depth
-  end
-
-  # Returns the stop_depth in the file 
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.stop_depth
-  #   => 17771.00
-  #
-  def stop_depth
-    self.well_info.stop_depth
-  end
-
-  # Returns the depth units in the file 
-  # 
-  # Example:
-  #   >> my_well = CWLSLas.new('my_well.las')
-  #   => #<CWLSLas>
-  #   >> my_well.depth_unit
-  #   => "F"
-  #
-  def depth_unit
-    self.well_info.depth_unit
-  end
-  
-end
