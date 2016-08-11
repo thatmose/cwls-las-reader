@@ -316,4 +316,9 @@ describe "CWLS LAS reader" do
     end
   end
 
+  describe CWLSLas, "tops section" do
+    context "Get number of tops in AB v2.0 las file 'example25_tops.las" do
+    end
+  end
+
 end
